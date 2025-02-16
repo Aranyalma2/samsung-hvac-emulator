@@ -1,0 +1,25 @@
+{
+  "name": "samsung-ac-emulator",
+  "version": "1.0.0",
+  "description": "Emulate samsung industrial ACs mobus communication.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "tester": "node self-tester.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aranyalma2/samsung-ac-emulator.git"
+  },
+  "author": "Aranyalma2",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Aranyalma2/samsung-ac-emulator/issues"
+  },
+  "homepage": "https://github.com/Aranyalma2/samsung-ac-emulator#readme",
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2"
+  }
+}
