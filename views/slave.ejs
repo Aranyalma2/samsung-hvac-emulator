@@ -64,7 +64,7 @@
       <div class="sidebar">
         <h3>Kültérik</h3>
         <ul>
-          <% [1,2,3].forEach(function(id){ %>
+          <% slaves.forEach(function(id){ %>
             <li>
               <a href="/slave/<%= id %>?group=<%= group %>" <%= id === slaveId ? 'style="color:blue;"' : '' %>>
                 Kültéri <%= id %>

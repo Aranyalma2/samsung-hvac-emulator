@@ -158,7 +158,7 @@ module.exports = { readHoldingRegisters, writeHoldingRegister };
 // After a short delay to allow the connection to establish, send a read request for 2 registers starting at address 0.
 // Then, send a write request to write the value 1234 to register at address 10.
 setTimeout(() => {
-  readHoldingRegisters(329, 3);
+  readHoldingRegisters(49, 3);
 }, 3000);
 
 setTimeout(() => {

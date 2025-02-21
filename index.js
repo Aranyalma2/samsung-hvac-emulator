@@ -238,7 +238,7 @@ app.get('/slave/:id', (req, res) => {
     registers = slaves[slaveId].registers.slice(start, start + 50);
   }
 
-  res.render('slave', { slaveId, registers, group });
+  res.render('slave', { slaves: SLAVE_IDS, slaveId, registers, group });
 });
 
 // Process form submission for updating registers.
