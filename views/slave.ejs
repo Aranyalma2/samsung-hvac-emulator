@@ -1,134 +1,85 @@
+<!-- filepath: d:\Munka\samsung-hvac-emulator\views\slave.ejs -->
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Eszköz <%= slaveId %> - Group <%= group %></title>
-    <style>
-      body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-      }
-      .container {
-        display: flex;
-        height: 100vh;
-      }
-      .sidebar {
-        width: 200px;
-        background-color: #f4f4f4;
-        padding: 10px;
-        box-sizing: border-box;
-      }
-      .sidebar ul {
-        list-style-type: none;
-        padding: 0;
-      }
-      .sidebar li {
-        margin-bottom: 10px;
-      }
-      .sidebar a {
-        text-decoration: none;
-        color: #333;
-        font-weight: bold;
-      }
-      .content {
-        flex: 1;
-        padding: 20px;
-      }
-      .top-bar {
-        background-color: #ddd;
-        padding: 10px;
-        margin-bottom: 20px;
-      }
-      .top-bar a {
-        margin-right: 10px;
-        text-decoration: none;
-        color: #333;
-        font-weight: bold;
-      }
-      .register {
-        margin-bottom: 10px;
-      }
-      .registers-container {
-        display: flex;
-      }
-      .register-column {
-        margin-right: 20px;
-      }
-      input[type="number"] {
-        width: 80px;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <div class="sidebar">
-        <h3>Kültérik</h3>
-        <ul>
-          <% slaves.forEach(function(id){ %>
-            <li>
-              <a href="/slave/<%= id %>?group=<%= group %>" <%= id === slaveId ? 'style="color:blue;"' : '' %>>
-                Kültéri <%= id %>
-              </a>
-            </li>
-          <% }); %>
-        </ul>
-        <!--<p><a href="/">Home</a></p>-->
+
+<head>
+  <title>Slave <%= slaveId %> - Modbus Emulator</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+  <div class="container">
+    <%- include('partials/sidebar', { slaves: slaves, slaveId: slaveId }) %>
+
+    <div class="content">
+      <!-- Top bar for selecting register groups with custom titles -->
+      <div class="top-bar">
+        <% 
+          const groupTitles = [
+            "Kültéri",    // group 1
+            "Beltéri 1",  // group 2
+            "Beltéri 2",  // group 3
+            "Beltéri 3",  // group 4
+            "Beltéri 4",  // group 5
+            "Beltéri 5",  // group 6
+            "Beltéri 6"   // group 7
+          ];
+          for(let g = 1; g <= 7; g++) { 
+        %>
+        <a href="/slave/<%= slaveId %>?group=<%= g %>" style="<%= g === group ? 'color: red;' : '' %>">
+          <%= groupTitles[g-1] %>
+        </a>
+        <% } %>
       </div>
-      <div class="content">
-        <!-- Top bar for selecting register groups with custom titles -->
-        <div class="top-bar">
-          <% 
-            const groupTitles = [
-              "Kültéri",    // group 1
-              "Beltéri 1",  // group 2
-              "Beltéri 2",  // group 3
-              "Beltéri 3",  // group 4
-              "Beltéri 4",  // group 5
-              "Beltéri 5",  // group 6
-              "Beltéri 6"   // group 7
-            ];
-            for(let g = 1; g <= 7; g++) { 
-          %>
-            <a href="/slave/<%= slaveId %>?group=<%= g %>" style="<%= g === group ? 'color: red;' : '' %>">
-              <%= groupTitles[g-1] %>
-            </a>
+
+      <h2>Eszköz <%= slaveId %> regiszterek - <%= group === 1 ? "Kültéri" : groupTitles[group-1] %></h2>
+
+      <form method="POST" action="/slave/<%= slaveId %>?group=<%= group %>">
+        <% if(group === 1) { %>
+        <!-- First group shows only 6 registers -->
+        <% registers.forEach(function(value, index) { %>
+        <div class="register">
+          <label for="reg<%= index %>">Regiszter <%= index %>:</label>
+          <input type="number" id="reg<%= index %>" name="reg<%= index %>" value="<%= value %>" min="0" max="65535">
+        </div>
+        <% }); %>
+        <% } else { 
+             // Groups 2-7: Show 50 registers in 5 columns
+             let maxPerCol = 10; // ~10 per column for 50 registers (50/5 = 10)
+             let total = registers.length; // should be 50
+             let numCols = 5;
+        %>
+        <div class="registers-container">
+          <% for(let col = 0; col < numCols; col++) { 
+                 let startIndex = col * maxPerCol;
+                 let endIndex = Math.min(startIndex + maxPerCol, total);
+            %>
+          <div class="register-column">
+            <% for(let i = startIndex; i < endIndex; i++) { 
+                      let regNumber = startReg + i;
+                %>
+            <div class="register">
+              <label for="reg<%= i %>">Regiszter <%= regNumber %>:</label>
+              <input type="number" id="reg<%= i %>" name="reg<%= i %>" value="<%= registers[i] %>" min="0" max="65535">
+            </div>
+            <% } %>
+          </div>
           <% } %>
         </div>
-        <h2>Eszköz <%= slaveId %> regiszterek - <%= group === 1 ? "Kültéri" : groupTitles[group-1] %></h2>
-        <form method="POST" action="/slave/<%= slaveId %>?group=<%= group %>">
-          <% if(group === 1) { %>
-            <% registers.forEach(function(value, index) { %>
-              <div class="register">
-                <label for="reg<%= index %>">Register <%= index %>:</label>
-                <input type="number" id="reg<%= index %>" name="reg<%= index %>" value="<%= value %>">
-              </div>
-            <% }); %>
-          <% } else { 
-               let maxPerCol = 20;
-               let total = registers.length; // should be 50
-               let numCols = Math.ceil(total / maxPerCol);
-          %>
-            <div class="registers-container">
-              <% for(let col = 0; col < numCols; col++) { 
-                   let startIndex = col * maxPerCol;
-                   let endIndex = Math.min(startIndex + maxPerCol, total);
-              %>
-                <div class="register-column">
-                  <% for(let i = startIndex; i < endIndex; i++) { 
-                        let regNumber = ((group - 1) * 50) + i;
-                  %>
-                    <div class="register">
-                      <label for="reg<%= i %>">Register <%= regNumber %>:</label>
-                      <input type="number" id="reg<%= i %>" name="reg<%= i %>" value="<%= registers[i] %>">
-                    </div>
-                  <% } %>
-                </div>
-              <% } %>
-            </div>
-          <% } %>
-          <button type="submit">Mentés</button>
-        </form>
-      </div>
+        <% } %>
+
+        <div class="button-group">
+          <button type="submit" class="btn btn-primary">Regiszterek frissítése</button>
+          <button type="button" class="btn btn-danger" onclick="if(confirm('Biztosan törli az összes regisztert ennél az eszköznél?')) { document.getElementById('clearForm').submit(); }">
+            Regiszterek törlése
+          </button>
+        </div>
+      </form>
+
+      <form id="clearForm" method="POST" action="/slave/<%= slaveId %>/clear?group=<%= group %>" style="display: none;">
+      </form>
     </div>
-  </body>
+  </div>
+</body>
+
 </html>

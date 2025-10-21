@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Beállítások - Modbus Emulátor</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+  <div class="container">
+    <%- include('partials/sidebar', { slaves: slaves, isConfigPage: true }) %>
+
+    <div class="content">
+      <h1>Program beállítások</h1>
+
+      <% if (typeof message !== 'undefined' && message) { %>
+      <div class="message"><%= message %></div>
+      <% } %>
+
+      <form method="POST" action="/config">
+        <div class="config-section">
+          <h2>Modbus TCP</h2>
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" name="modbusTcpEnabled" <%= config.modbusTcp.enabled ? 'checked' : '' %>>
+              Modbus TCP engedélyezése
+            </label>
+          </div>
+          <div class="form-group">
+            <label for="modbusTcpPort">TCP Port:</label>
+            <input type="number" id="modbusTcpPort" name="modbusTcpPort" value="<%= config.modbusTcp.port %>" min="1" max="65535">
+          </div>
+        </div>
+
+        <div class="config-section">
+          <h2>Modbus RTU (Soros port)</h2>
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" name="modbusRtuEnabled" <%= config.modbusRtu.enabled ? 'checked' : '' %>>
+              Modbus RTU engedélyezése
+            </label>
+          </div>
+          <div class="form-group">
+            <label for="modbusRtuPort">COM Port:</label>
+            <input type="text" id="modbusRtuPort" name="modbusRtuPort" value="<%= config.modbusRtu.port %>" placeholder="COM1">
+          </div>
+          <div class="form-group">
+            <label for="modbusRtuBaudRate">Baud Rate:</label>
+            <select id="modbusRtuBaudRate" name="modbusRtuBaudRate">
+              <option value="1200" <%= config.modbusRtu.baudRate === 1200 ? 'selected' : '' %>>1200</option>
+              <option value="2400" <%= config.modbusRtu.baudRate === 2400 ? 'selected' : '' %>>2400</option>
+              <option value="4800" <%= config.modbusRtu.baudRate === 4800 ? 'selected' : '' %>>4800</option>
+              <option value="9600" <%= config.modbusRtu.baudRate === 9600 ? 'selected' : '' %>>9600</option>
+              <option value="19200" <%= config.modbusRtu.baudRate === 19200 ? 'selected' : '' %>>19200</option>
+              <option value="38400" <%= config.modbusRtu.baudRate === 38400 ? 'selected' : '' %>>38400</option>
+              <option value="57600" <%= config.modbusRtu.baudRate === 57600 ? 'selected' : '' %>>57600</option>
+              <option value="115200" <%= config.modbusRtu.baudRate === 115200 ? 'selected' : '' %>>115200</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="modbusRtuDataBits">Data Bits:</label>
+            <select id="modbusRtuDataBits" name="modbusRtuDataBits">
+              <option value="7" <%= config.modbusRtu.dataBits === 7 ? 'selected' : '' %>>7</option>
+              <option value="8" <%= config.modbusRtu.dataBits === 8 ? 'selected' : '' %>>8</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="modbusRtuParity">Paritás:</label>
+            <select id="modbusRtuParity" name="modbusRtuParity">
+              <option value="none" <%= config.modbusRtu.parity === 'none' ? 'selected' : '' %>>Nincs</option>
+              <option value="even" <%= config.modbusRtu.parity === 'even' ? 'selected' : '' %>>Páros</option>
+              <option value="odd" <%= config.modbusRtu.parity === 'odd' ? 'selected' : '' %>>Páratlan</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="modbusRtuStopBits">Stop Bits:</label>
+            <select id="modbusRtuStopBits" name="modbusRtuStopBits">
+              <option value="1" <%= config.modbusRtu.stopBits === 1 ? 'selected' : '' %>>1</option>
+              <option value="2" <%= config.modbusRtu.stopBits === 2 ? 'selected' : '' %>>2</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Beállítások mentése</button>
+      </form>
+
+      <div class="config-section clear-section">
+        <h2>Összes eszköz alaphelyzetbe állítása</h2>
+        <p>Ez az összes eszköz összes regiszterét nullázza.</p>
+        <form method="POST" action="/config/clear-all" onsubmit="return confirm('Biztosan alaphelyzetbe állítja az összes eszköz regisztereit?');">
+          <button type="submit" class="btn btn-danger">Összes eszköz alaphelyzetbe állítása</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

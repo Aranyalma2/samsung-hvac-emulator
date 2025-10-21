@@ -3,60 +3,18 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Modbus RTU Multi-Slave Server</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-    }
-
-    .container {
-      display: flex;
-      height: 100vh;
-    }
-
-    .sidebar {
-      width: 200px;
-      background-color: #f4f4f4;
-      padding: 10px;
-      box-sizing: border-box;
-    }
-
-    .sidebar ul {
-      list-style-type: none;
-      padding: 0;
-    }
-
-    .sidebar li {
-      margin-bottom: 10px;
-    }
-
-    .sidebar a {
-      text-decoration: none;
-      color: #333;
-      font-weight: bold;
-    }
-
-    .content {
-      flex: 1;
-      padding: 20px;
-    }
-  </style>
+  <title>Modbus RTU Multi-Slave Szimulátor</title>
+  <link rel="stylesheet" href="/style.css">
 </head>
 
 <body>
   <div class="container">
-    <div class="sidebar">
-      <h3>Kültérik</h3>
-      <ul>
-        <% slaves.forEach(function(slaveId) { %>
-          <li><a href="/slave/<%= slaveId %>">Kültéri <%= slaveId %></a></li>
-          <% }); %>
-      </ul>
-    </div>
+    <%- include('partials/sidebar', { slaves: slaves }) %>
+
     <div class="content">
-      <h2>Welcome to the Modbus RTU Web Interface</h2>
-      <p>Select a slave from the sidebar to view and update its registers.</p>
+      <h1>Üdvözöljük a Modbus RTU Webes Felületen</h1>
+      <p>Válasszon egy kültérit az oldalsó menüből a regiszterek megtekintéséhez és módosításához.</p>
+      <p>A <a href="/config">Program beállítások</a> menüpontban konfigurálhatja a Modbus TCP és RTU beállításokat.</p>
     </div>
   </div>
 </body>

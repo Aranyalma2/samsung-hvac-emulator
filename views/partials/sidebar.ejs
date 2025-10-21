@@ -1,0 +1,21 @@
+<!-- Sidebar component -->
+<div class="sidebar">
+  <h2>Kültérik</h2>
+  <ul>
+    <% slaves.forEach(function(id) { %>
+    <li>
+      <a href="/slave/<%= id %>" <%= typeof slaveId !== 'undefined' && id === slaveId ? 'class="active"' : '' %>>
+        Kültéri <%= id %>
+      </a>
+    </li>
+    <% }); %>
+  </ul>
+  <hr>
+  <ul>
+    <li>
+      <a href="/config" <%= typeof isConfigPage !== 'undefined' && isConfigPage ? 'class="active"' : '' %>>
+        Program beállítások
+      </a>
+    </li>
+  </ul>
+</div>

@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Expose the ports for the web server (3000) and the modbus server (8502)
-EXPOSE 2999
+EXPOSE 3000
 EXPOSE 8502
 
 # Start the application.
